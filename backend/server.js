@@ -37,7 +37,7 @@ app.use('/api/complaints', complaintRoutes); // Routes for managing complaints
 app.use('/api/feedbacks', feedbackRoutes); // Routes for sending feedback
 app.use('/api/announcements', announcementRoutes); // Routes for managing announcements
 app.use('/api', chatRoutes);
-app.use('/api/otp', otpRoutes); // Add the OTP routes
+app.use('/api/otps', otpRoutes); // Add the OTP routes
 
 
 // Global Error Handling Middleware

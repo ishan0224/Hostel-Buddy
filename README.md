@@ -115,6 +115,9 @@ The server will start on `http://localhost:5000`.
 
 ## Deployment
 The backend is deployed using Render. You can access the live service by visiting your Render app URL.
-
 Ensure that all environment variables are correctly set in Render to make the services functional.
+
+## Contributing
+If you wish to contribute, feel free to fork the repository and submit a pull request. Contributions are always welcome, whether they are bug fixes, improvements, or adding new features.
+
 

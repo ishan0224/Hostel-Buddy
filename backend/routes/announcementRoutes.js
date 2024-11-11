@@ -1,9 +1,11 @@
 import express from 'express';
 import { Announcement } from '../models/announcement.models.js';
+import { User } from '../models/user.models.js';
+import { UserNotification } from '../models/userNotification.models.js';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post('/create', async (req, res) => {
     const { title, content } = req.body;
 
     try {
@@ -11,7 +13,21 @@ router.post('/', async (req, res) => {
         const newAnnouncement = new Announcement({ title, content });
         await newAnnouncement.save();
 
-        res.status(201).json({ message: 'Announcement created successfully', announcement: newAnnouncement });
+        // Fetch all users to send a notification
+        const users = await User.find();
+
+        if (users.length > 0) {
+            const notifications = users.map(user => ({
+                user: user._id,
+                message: `New announcement: ${title}`,
+                type: 'other',
+            }));
+
+            // Insert multiple notifications at once
+            await UserNotification.insertMany(notifications);
+        }
+
+        res.status(201).json({ message: 'Announcement created successfully, notifications sent to users', announcement: newAnnouncement });
     } catch (error) {
         res.status(500).json({ message: 'Error creating announcement', error: error.message });
     }
@@ -61,6 +77,5 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ message: 'Error deleting announcement', error: error.message });
     }
 });
-
 
 export default router;

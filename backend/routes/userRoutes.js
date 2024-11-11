@@ -1,7 +1,7 @@
 // userRoutes.js
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user.models.js'; // No need to import bcrypt here as it's handled by the schema middleware
+import { User } from '../models/user.models.js'; 
 import authMiddleware from '../middleware/authMiddleware.js';
 import dotenv from 'dotenv';
 
@@ -53,11 +53,13 @@ router.post('/login', async (req, res) => {
         // Generate JWT token
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.status(200).json({ message: 'Login successful', token });
+        // Include _id in the response
+        res.status(200).json({ message: 'Login successful', token, userId: user._id });
     } catch (error) {
         res.status(500).json({ message: 'Error logging in', error: error.message });
     }
 });
+
 
 // Get user by ID (Authenticated Route)
 router.get('/:id', authMiddleware, async (req, res) => {
